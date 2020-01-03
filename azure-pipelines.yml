@@ -3,17 +3,17 @@ variables:
   
 stages:
 - stage: build
-    displayName: Build
-    pool:
+  displayName: Build
+  pool:
     vmImage: "Ubuntu 16.04"    
-    jobs:
+  jobs:
     job: build-dotnet-solution
     steps:
     - task: DotNetCoreCLI@2
-    inputs:
+      inputs:
         command: build
         arguments: '--configuration $(buildConfiguration)'
 - stage: test
-    displayName: Test
-    dependsOn:
-    - build
+  displayName: Test
+  dependsOn:
+  - build
