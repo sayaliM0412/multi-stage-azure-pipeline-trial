@@ -36,4 +36,60 @@ stages:
     - build
 ```
 
-this will give us our building blocks to add our jobs.
+this will give us our building blocks to add our jobs. If you check this file into DevOps and navigate to pipelines you can see that we have a pipeline defined without any runs associated to it.
+
+![no runs](images/no-runs.png)
+
+# Adding a Job
+
+A job runs on a build agent. By default DevOps provides hosted build agents that a preconfigured VM's that have a lot of different development tools preinstalled. I'll be using the hosted agents for this post.
+
+Let's add in some YAML to add a job that will build our .net solution. We can do this in one of two ways, we can use a devops "task" or we can write a script. Tasks can provide a lot of features that you would normally need to script yourself. These can be very helpful, however it also hides a lot of what is being completed. I tend to try and use tasks and they get updated regulary to add additional features and other bug fixes. There aren't tasks for everything however so you will need to write some scripts eventually as well.
+
+## Example as Task
+
+``` yaml
+variables:
+  buildConfiguration: "Release"
+
+stages:
+  - stage: build
+    displayName: Build
+    pool:
+      vmImage: "Ubuntu 16.04"    
+    jobs:
+      job: build-dotnet-solution
+      steps:
+      - task: DotNetCoreCLI@2
+      inputs:
+        command: build
+        arguments: '--configuration $(buildConfiguration)'
+  - stage: test
+    displayName: Test
+    dependsOn:
+    - build
+```
+
+## Example as script
+
+``` yaml
+variables:
+  buildConfiguration: "Release"
+
+stages:
+  - stage: build
+    displayName: Build
+    pool:
+      vmImage: "Ubuntu 16.04"    
+    jobs:
+      job: build-dotnet-solution
+      steps:
+      - script: |
+      dotnet build --configuration $(buildConfiguration)
+  - stage: test
+    displayName: Test
+    dependsOn:
+    - build
+```
+
+In both examples I have added a variable to se the build configuration setting for the pipeline. Variables are very helpful and DevOps also provides a lot of pre-defined variables for you. You can ready about them [here](https://docs.microsoft.com/en-us/azure/devops/pipelines/build/variables?view=azure-devops&tabs=yaml)
