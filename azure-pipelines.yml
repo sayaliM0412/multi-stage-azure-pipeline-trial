@@ -1,19 +1,19 @@
 variables:
     buildConfiguration: "Release"
   
-  stages:
-    - stage: build
-      displayName: Build
-      pool:
-        vmImage: "Ubuntu 16.04"    
-      jobs:
-        job: build-dotnet-solution
-        steps:
-        - task: DotNetCoreCLI@2
-        inputs:
-          command: build
-          arguments: '--configuration $(buildConfiguration)'
-    - stage: test
-      displayName: Test
-      dependsOn:
-      - build
+stages:
+- stage: build
+    displayName: Build
+    pool:
+    vmImage: "Ubuntu 16.04"    
+    jobs:
+    job: build-dotnet-solution
+    steps:
+    - task: DotNetCoreCLI@2
+    inputs:
+        command: build
+        arguments: '--configuration $(buildConfiguration)'
+- stage: test
+    displayName: Test
+    dependsOn:
+    - build
