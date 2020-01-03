@@ -1,0 +1,7 @@
+stages:
+    - stage: build
+      displayName: Build
+    - stage: test
+      displayName: Test
+      dependsOn:
+      - build
