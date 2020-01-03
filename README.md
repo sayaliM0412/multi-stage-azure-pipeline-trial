@@ -51,23 +51,24 @@ Let's add in some YAML to add a job that will build our .net solution. We can do
 ``` yaml
 variables:
   buildConfiguration: "Release"
-
+  
 stages:
-  - stage: build
-    displayName: Build
-    pool:
-      vmImage: "Ubuntu 16.04"    
-    jobs:
-      job: build-dotnet-solution
-      steps:
-      - task: DotNetCoreCLI@2
+- stage: build
+  displayName: Build
+  pool:
+    vmImage: "Ubuntu 16.04"    
+  jobs:
+  - job: build-dotnet-solution
+    displayName: build dotnet solution
+    steps:
+    - task: DotNetCoreCLI@2
       inputs:
         command: build
         arguments: '--configuration $(buildConfiguration)'
-  - stage: test
-    displayName: Test
-    dependsOn:
-    - build
+- stage: test
+  displayName: Test
+  dependsOn:
+  - build
 ```
 
 ## Example as script
@@ -75,21 +76,22 @@ stages:
 ``` yaml
 variables:
   buildConfiguration: "Release"
-
+  
 stages:
-  - stage: build
-    displayName: Build
-    pool:
-      vmImage: "Ubuntu 16.04"    
-    jobs:
-      job: build-dotnet-solution
-      steps:
-      - script: |
+- stage: build
+  displayName: Build
+  pool:
+    vmImage: "Ubuntu 16.04"    
+  jobs:
+  - job: build-dotnet-solution
+    displayName: build dotnet solution
+    steps:
+    - script: |
       dotnet build --configuration $(buildConfiguration)
-  - stage: test
-    displayName: Test
-    dependsOn:
-    - build
+- stage: test
+  displayName: Test
+  dependsOn:
+  - build
 ```
 
 In both examples I have added a variable to se the build configuration setting for the pipeline. Variables are very helpful and DevOps also provides a lot of pre-defined variables for you. You can ready about them [here](https://docs.microsoft.com/en-us/azure/devops/pipelines/build/variables?view=azure-devops&tabs=yaml).

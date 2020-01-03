@@ -7,7 +7,8 @@ stages:
   pool:
     vmImage: "Ubuntu 16.04"    
   jobs:
-    job: build-dotnet-solution
+  - job: build-dotnet-solution
+    displayName: build dotnet solution
     steps:
     - task: DotNetCoreCLI@2
       inputs:
