@@ -1,29 +1,29 @@
 variables:
-    buildConfiguration: "Release"
-    
-  stages:
-  - stage: build
-    displayName: Build
-    pool:
-      vmImage: "Ubuntu 16.04"    
-    jobs:
-    - job: build_dotnet_solution
-      displayName: build dotnet solution
-      steps:
-      - task: DotNetCoreCLI@2
-        inputs:
-          command: build
-          arguments: '--configuration $(buildConfiguration)'
-      - publish: $(System.DefaultWorkingDirectory)/src/demo-project/bin/$(buildConfiguration)/netcoreapp3.0/
-        artifact: source
-  - stage: test
-    displayName: Test
-    dependsOn:
-    - build
-    jobs:
-    - job: test_dotnet_solution
-      displayName: test dotnet solution
-      steps:
-      - task: DotNetCoreCLI@2
-        inputs:
-          command: test
+  buildConfiguration: "Release"
+  
+stages:
+- stage: build
+  displayName: Build
+  pool:
+    vmImage: "Ubuntu 16.04"    
+  jobs:
+  - job: build_dotnet_solution
+    displayName: build dotnet solution
+    steps:
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: build
+        arguments: '--configuration $(buildConfiguration)'
+    - publish: $(System.DefaultWorkingDirectory)/src/demo-project/bin/$(buildConfiguration)/netcoreapp3.0/
+      artifact: source
+- stage: test
+  displayName: Test
+  dependsOn:
+  - build
+  jobs:
+  - job: test_dotnet_solution
+    displayName: test dotnet solution
+    steps:
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: test

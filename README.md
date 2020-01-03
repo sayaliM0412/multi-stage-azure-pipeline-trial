@@ -163,5 +163,4 @@ stages:
     - task: DotNetCoreCLI@2
       inputs:
         command: test
-
 ```
