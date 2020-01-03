@@ -95,3 +95,32 @@ stages:
 ```
 
 In both examples I have added a variable to se the build configuration setting for the pipeline. Variables are very helpful and DevOps also provides a lot of pre-defined variables for you. You can ready about them [here](https://docs.microsoft.com/en-us/azure/devops/pipelines/build/variables?view=azure-devops&tabs=yaml).
+
+# Artifacts
+
+Now that we have our job running and our sln is being build. We will probably want to hold onto these files. We will need to artifact these files if we want to use them in a different job, or we can download them later for manually testing the build.
+
+``` yaml
+variables:
+  buildConfiguration: "Release"
+  
+stages:
+- stage: build
+  displayName: Build
+  pool:
+    vmImage: "Ubuntu 16.04"    
+  jobs:
+  - job: build_dotnet_solution
+    displayName: build dotnet solution
+    steps:
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: build
+        arguments: '--configuration $(buildConfiguration)'
+    - publish: $(System.DefaultWorkingDirectory)/bin/$(buildConfiguration)/netcoreapp3.0/
+      artifact: source
+- stage: test
+  displayName: Test
+  dependsOn:
+  - build
+```
