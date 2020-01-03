@@ -83,7 +83,7 @@ stages:
   pool:
     vmImage: "Ubuntu 16.04"    
   jobs:
-  - job: build-dotnet-solution
+  - job: build_dotnet_solution
     displayName: build dotnet solution
     steps:
     - script: |
