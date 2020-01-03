@@ -117,10 +117,12 @@ stages:
       inputs:
         command: build
         arguments: '--configuration $(buildConfiguration)'
-    - publish: $(System.DefaultWorkingDirectory)/bin/$(buildConfiguration)/netcoreapp3.0/
+    - publish: $(System.DefaultWorkingDirectory)/src/demo-project/bin/$(buildConfiguration)/netcoreapp3.0/
       artifact: source
 - stage: test
   displayName: Test
   dependsOn:
   - build
 ```
+
+Once the build is completed you should see the 
