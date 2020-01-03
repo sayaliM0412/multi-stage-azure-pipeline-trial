@@ -4,7 +4,7 @@ In this post I'll walk through a basic YAML file and show how you can get a C# p
 
 # Setup
 
-We need to have a project that is checked into DevOps before we begin. I have a repository that I made for this blog up on DevOps that is a basic dotnet core console application and a unit test project that goes along with it. At the time of writing this blog post you will also need to turn on the multi-sgae pipelines Preview Feature in order to get the best view for these pipelines. You can do that by clicking on the user settings button
+We need to have a project that is checked into DevOps before we begin. I have a [repository](https://dev.azure.com/focisolutions/_git/Multi-Stage-Pipeline) that I made for this blog up on DevOps that is a basic dotnet core console application and a unit test project that goes along with it. At the time of writing this blog post you will also need to turn on the multi-sgae pipelines Preview Feature in order to get the best view for these pipelines. You can do that by clicking on the user settings button
 
 ![user settings](images/user-settings.png)
 
@@ -125,4 +125,43 @@ stages:
   - build
 ```
 
-Once the build is completed you should see the 
+Once the build is completed you should see the artifacts on the build page. You can download them and use them in different jobs now.
+
+![artifacts](images/artifacts.png)
+
+# Testing
+
+Now that we have our code built, we can go ahead and run the tests for our application. DevOps also has the ability to show us test results through its dashboards. It's easiest to use the task for this as the task has capabilities to upload the tests results for us.
+
+``` yaml
+variables:
+  buildConfiguration: "Release"
+  
+stages:
+- stage: build
+  displayName: Build
+  pool:
+    vmImage: "Ubuntu 16.04"    
+  jobs:
+  - job: build_dotnet_solution
+    displayName: build dotnet solution
+    steps:
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: build
+        arguments: '--configuration $(buildConfiguration)'
+    - publish: $(System.DefaultWorkingDirectory)/src/demo-project/bin/$(buildConfiguration)/netcoreapp3.0/
+      artifact: source
+- stage: test
+  displayName: Test
+  dependsOn:
+  - build
+  jobs:
+  - job: test_dotnet_solution
+    displayName: test dotnet solution
+    steps:
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: test
+
+```
