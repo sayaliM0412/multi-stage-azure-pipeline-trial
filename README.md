@@ -162,5 +162,10 @@ stages:
     steps:
     - task: DotNetCoreCLI@2
       inputs:
-        command: test
+        command: test        
+        arguments: '--configuration $(buildConfiguration)'
 ```
+
+![test-success](images/test-success.png)
+
+With this you now have a basic build and test pipeline that will run with every check-in to your repository. There is a lot more that can be done such as manage environments and perform releases. I hope that this is a good starting block to get moving with DevOps.
