@@ -28,3 +28,7 @@ stages:
       inputs:
         command: test        
         arguments: '--configuration $(buildConfiguration)'
+    - task: KubernetesManifest@0
+      inputs:
+        action: 'deploy'
+        kubernetesServiceConnection: 'trailrun'
