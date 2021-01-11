@@ -32,3 +32,4 @@ stages:
       inputs:
         action: 'deploy'
         kubernetesServiceConnection: 'trailrun'
+        manifests: 'Multi-Stage-Pipeline/src/demo-project-tests'
