@@ -29,9 +29,6 @@ stages:
       inputs:
         command: test        
         arguments: '--configuration $(buildConfiguration)'
-    - task: KubectlInstaller@0
-      inputs:
-        kubectlVersion: 'latest'
     - task: KubernetesManifest@0
       inputs:
         action: 'deploy'
